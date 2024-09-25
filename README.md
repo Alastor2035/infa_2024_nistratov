@@ -1,2 +1,3 @@
 # infa_2024_nistratov 
-homeworks
+lab3 - третье занятие
+geogebra - проект
