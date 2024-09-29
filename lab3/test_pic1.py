@@ -9,13 +9,15 @@ pygame.init()
 FPS = 30
 SCREEN_WIDTH, SCREEN_HEIGHT = 800, 600
 SKY_BLUE = (135, 206, 235)
-WATER_BLUE = (0, 105, 148)
+WATER_BLUE = (0, 105, 200)
 SAND_COLOR = (230, 230, 0)
 YELLOW = (255, 255, 0)
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 RED = (255, 0, 0)
 ORANGE = (255, 165, 0)
+BEIGE = (200, 200, 170)
+BROWN = (139, 69, 19)
 
 # Set up the screen
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -87,17 +89,40 @@ def draw_umbrella(x, y):
         end_y = y
         line(screen, BLACK, hat_top, (end_x, end_y))
 
-def draw_sailboat(x, y):
-    # Draw the sailboat
-    rect(screen, BLACK, (x, y, 60, 20))  # Boat body
-    polygon(screen, WHITE, [(x + 30, y - 30), (x + 60, y), (x, y)])  # Sail
+def draw_sailboat(x, y, size):
+    # Draw the hull as an inverted trapezoid
+    hull_height = size // 4
+    hull_top_width = size
+    hull_bottom_width = size * 0.6
+    hull_top_left = (x - hull_top_width // 2, y)
+    hull_top_right = (x + hull_top_width // 2, y)
+    hull_bottom_left = (x - hull_bottom_width // 2, y + hull_height)
+    hull_bottom_right = (x + hull_bottom_width // 2, y + hull_height)
+    hull_points = [hull_top_left, hull_top_right, hull_bottom_right, hull_bottom_left]
+    polygon(screen, BROWN, hull_points)
+    
+    # Draw the mast
+    mast_height = size // 2
+    mast_width = size // 15
+    rect(screen, BLACK, (x - mast_width // 2, y - mast_height, mast_width, mast_height))
+    
+    # Draw the sail as a light beige triangle
+    sail_height = mast_height
+    sail_width = size // 2
+    sail_top = (x + mast_width // 2, y - sail_height)
+    sail_bottom_left = (x + mast_width // 2, y - size // 15)
+    sail_bottom_right = (x + sail_width +  + mast_width // 2, y - size // 15)
+    polygon(screen, BEIGE, [sail_top, sail_bottom_left, sail_bottom_right])
 
 # Draw everything
 draw_background()
 draw_sun()
 draw_cloud(100, 50, 100, 40)  # Custom width and height for the cloud
+draw_cloud(400, 150, 200, 70)
 draw_umbrella(350, 400)
-draw_sailboat(400, 400)
+draw_umbrella(250, 500)
+draw_sailboat(500, 350, 200) 
+draw_sailboat(300, 320, 100)  # Custom size for the sailboat
 
 pygame.display.update()
 
