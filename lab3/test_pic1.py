@@ -23,7 +23,7 @@ BROWN = (139, 69, 19)
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 def draw_background():
-    # Draw the sky
+    """Draw the background including sky, water, and beach."""
     screen.fill(SKY_BLUE)
     
     # Draw the water
@@ -33,19 +33,19 @@ def draw_background():
 
     # Draw the beach with a wavy border made of semicircles
     rect(screen, SAND_COLOR, (0, SCREEN_HEIGHT * 3 // 4, SCREEN_WIDTH, SCREEN_HEIGHT // 4))
-    for x in range(0, SCREEN_WIDTH, wave_length*2):
+    for x in range(0, SCREEN_WIDTH, wave_length * 2):
         arc(screen, WATER_BLUE, (x, SCREEN_HEIGHT * 3 // 4 - wave_height, wave_length, wave_height * 2), math.pi, 2 * math.pi, 200)
-    for x in range(wave_length, SCREEN_WIDTH, wave_length*2):
-        arc(screen, SAND_COLOR, (x, SCREEN_HEIGHT * 3 // 4 -  wave_height, wave_length, wave_height * 2), 0, math.pi, 200)
+    for x in range(wave_length, SCREEN_WIDTH, wave_length * 2):
+        arc(screen, SAND_COLOR, (x, SCREEN_HEIGHT * 3 // 4 - wave_height, wave_length, wave_height * 2), 0, math.pi, 200)
 
 def draw_sun():
-    # Draw the sun
+    """Draw the sun with rays."""
     sun_center = (700, 100)
     sun_radius = 50
     circle(screen, YELLOW, sun_center, sun_radius)
     
     # Draw rays of triangles
-    num_rays = 24  # More frequent rays
+    num_rays = 24
     ray_length = 70
     for i in range(num_rays):
         angle = i * (360 / num_rays)
@@ -57,7 +57,7 @@ def draw_sun():
                                   sun_center[1] + ray_length * math.sin(math.radians(angle + 7.5)))])
 
 def draw_cloud(x, y, width, height):
-    # Draw a cloud consisting of two rows of circles with specified width and height
+    """Draw a cloud consisting of two rows of circles with specified width and height."""
     num_circles = 5
     circle_radius = height // 2
     for row in range(2):
@@ -68,7 +68,7 @@ def draw_cloud(x, y, width, height):
             circle(screen, BLACK, (x + offset_x, y + offset_y), circle_radius, 1)
 
 def draw_umbrella(x, y):
-    # Draw the umbrella leg
+    """Draw an umbrella with a leg and a hat."""
     leg_height = 100
     leg_width = 5
     rect(screen, ORANGE, (x, y, leg_width, leg_height))
@@ -90,7 +90,8 @@ def draw_umbrella(x, y):
         line(screen, BLACK, hat_top, (end_x, end_y))
 
 def draw_sailboat(x, y, size):
-    # Draw the hull as an inverted trapezoid
+    """Draw a sailboat with a hull, mast, and sail."""
+    # Draw the hull as an inverted trapezoid with a rounded back
     hull_height = size // 4
     hull_top_width = size
     hull_bottom_width = size * 0.6
@@ -100,6 +101,15 @@ def draw_sailboat(x, y, size):
     hull_bottom_right = (x + hull_bottom_width // 2, y + hull_height)
     hull_points = [hull_top_left, hull_top_right, hull_bottom_right, hull_bottom_left]
     polygon(screen, BROWN, hull_points)
+    
+    # Draw the rounded back side of the hull
+    arc(screen, BROWN, (x - hull_bottom_width, y - hull_bottom_width * 0.38, hull_bottom_width, hull_bottom_width * 0.81), math.pi, math.pi * 1.5, 70)
+    
+    # Draw the window at the front of the hull
+    window_radius = size // 15
+    window_center = (x + hull_top_width // 3 - window_radius * 2, y + hull_height // 2)
+    circle(screen, WHITE, window_center, window_radius)
+    circle(screen, BLACK, window_center, window_radius, 4 * size // 200)
     
     # Draw the mast
     mast_height = size // 2
@@ -111,7 +121,7 @@ def draw_sailboat(x, y, size):
     sail_width = size // 2
     sail_top = (x + mast_width // 2, y - sail_height)
     sail_bottom_left = (x + mast_width // 2, y - size // 15)
-    sail_bottom_right = (x + sail_width +  + mast_width // 2, y - size // 15)
+    sail_bottom_right = (x + sail_width + mast_width // 2, y - size // 15)
     polygon(screen, BEIGE, [sail_top, sail_bottom_left, sail_bottom_right])
 
 # Draw everything
