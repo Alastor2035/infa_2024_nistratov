@@ -9,4 +9,3 @@ for key in b.keys():
     else:
         ab[key] = [None, b[key]]
 print(ab)
-
