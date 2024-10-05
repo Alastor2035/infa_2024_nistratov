@@ -22,6 +22,14 @@ clock = pygame.time.Clock()
 
 balls_list = gg.balls_list()
 
+f = open("game_sfere/score.txt",'r')
+sclist = []
+for i in f.readlines():
+    sclist.append(list(i.split(': '))[::-1])
+    sclist[-1][0] = int(sclist[-1][0][:-1])
+f.close()
+sclist.sort(reverse=True)
+
 
 running = True
 while running:
@@ -47,9 +55,14 @@ while running:
 
                  
     screen.fill((0, 0, 0))
-    drawText(screen, WHITE, "Счёт:" + str(score), pygame.Rect(500, 10, 300, 30), font_size=50)
     balls_list.update(WIDTH, HEIGHT)
     balls_list.draw(screen)
+    drawText(screen, WHITE, "Счёт:" + str(score), pygame.Rect(500, 10, 300, 30), font_size=50)
+    drawText(screen, WHITE, "Топ:", pygame.Rect(700, 10, 300, 30), font_size=50)
+    for i in range(min(5, len(sclist))):
+        drawText(screen, WHITE, sclist[i][1] + ": " + str(sclist[i][0]), pygame.Rect(700, 50+35*i, 300, 30), font_size=30)
+
+
     pygame.display.flip()
     clock.tick(FPS)
 f = open("game_sfere/score.txt",'r')
@@ -60,7 +73,6 @@ for i in f.readlines():
 f.close()
 e.append([score, name])
 e.sort(reverse=True)
-print(e)
 f = open("game_sfere/score.txt",'w')
 for i in range(min(5, len(e))):
     f.write(e[i][1] + ": " + str(e[i][0]) + '\n')
