@@ -55,11 +55,13 @@ while running:
 f = open("game_sfere/score.txt",'r')
 e = []
 for i in f.readlines():
-    e.append(i)
+    e.append(list(i.split(': '))[::-1])
+    e[-1][0] = int(e[-1][0][:-1])
 f.close()
-
+e.append([score, name])
+e.sort(reverse=True)
+print(e)
 f = open("game_sfere/score.txt",'w')
-for i in e:
-    f.write(i)
-f.write(name + ": " + str(score) + '\n')
+for i in range(min(5, len(e))):
+    f.write(e[i][1] + ": " + str(e[i][0]) + '\n')
 f.close()
