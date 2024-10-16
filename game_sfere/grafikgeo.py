@@ -161,12 +161,21 @@ class balls_list(figures_list):
                 i.update(width, height)
             else:
                 i.update(width, height, self)
+        for i in self.figures:
+            for j in self.figures:
+                if i.collapses < 1 and j.collapses < 1:
+                    if i.centre.dist(j.centre) <= i.radius + j.radius and i.centre.dist(j.centre)>0:
+                        i.collapse(j)
+        for i in self.figures:
+            i.collapses = 0
+
 
 class Ball(Circle):
 
     def __init__(self, x, y, scale, color, vx, vy):
         self.radius = 7 * scale
         self.cost = 10 // scale
+        self.collapses = 0
         self.color = color
         self.vx = vx
         self.vy = vy
@@ -194,6 +203,28 @@ class Ball(Circle):
 
     def catch(self, x, y, r):
         return self.radius + r >= self.centre.dist(bg.Point(x, y))
+    
+    def collapse(self, ball, fo = 0, ctype = 0):
+        self.collapses = +1
+        if ctype == 0:
+            sspe = bg.Vector(self.vx, self.vy)
+            ospe = bg.Vector(ball.vx, ball.vy)
+            d = bg.Vector(self.centre, ball.centre)
+            putv = (d * sspe) * ((1/d.dist())**2) * d
+            getv = (d * ospe) * ((1/d.dist())**2) * d
+            ball.collapse(self, putv, 1)
+            self.vx -= putv.x - getv.x
+            self.vy -= putv.y - getv.y
+        if ctype == 1:
+            sspe = bg.Vector(self.vx, self.vy)
+            d = bg.Vector(self.centre, ball.centre)
+            putv = (d * sspe) * ((1/d.dist())**2) * d
+            getv = fo
+            self.vx -= putv.x - getv.x
+            self.vy -= putv.y - getv.y
+
+
+
     
 class Ball_hunter(Ball):
 
