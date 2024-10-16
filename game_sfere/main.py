@@ -38,16 +38,7 @@ while running:
             running = False
         if e.type == pygame.KEYDOWN:
             if e.key == pygame.K_SPACE:
-                a = random.randint(1, 8)
-                for i in range(a):
-                    x = random.randint(0, WIDTH)
-                    y = random.randint(0, HEIGHT)
-                    vx = random.randint(-5, 5)
-                    vy = random.randint(-5, 5)
-                    color = COLORS_LIST[random.randint(1, len(COLORS_LIST)-1)]
-                    scale = random.randint(1, 7)
-                    ball = gg.Ball(x, y, scale, color, vx, vy)
-                    balls_list.add(ball)   
+                balls_list.generate(WIDTH, HEIGHT) 
         if e.type == pygame.MOUSEBUTTONDOWN:
             if e.button == 1:
                 x, y = pygame.mouse.get_pos()

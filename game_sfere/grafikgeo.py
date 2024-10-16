@@ -1,6 +1,8 @@
 import basegeo as bg
 import pygame
 import math
+import random
+from colors import *
 
 class Point(bg.Point):
 
@@ -131,11 +133,34 @@ class figures_shift_list(figures_list):
 class balls_list(figures_list):
 
     def catch(self, x, y):
+        su = 0 
         for i in self.figures:
-            if i.catch(x, y):
+            if i.catch(x, y, 0):
                 self.delet(i)
-                return i.cost
-        return 0
+                su += i.cost
+        return su
+    
+    def generate(self,WIDTH, HEIGHT):
+        a = random.randint(1, 8)
+        for i in range(a+1):
+            x = random.randint(50, WIDTH-50)
+            y = random.randint(50, HEIGHT-50)
+            vx = random.randint(-5, 5)
+            vy = random.randint(-5, 5)
+            color = COLORS_LIST[random.randint(1, len(COLORS_LIST)-1)]
+            scale = random.randint(1, 7)
+            if i != a:
+                ball = Ball(x, y, scale, color, vx, vy)
+            else:
+                ball = Ball_hunter(x, y, scale, color, vx, vy)
+            self.add(ball)  
+
+    def update(self, width, height):
+        for i in self.figures:
+            if i.ftype == 'Ball':
+                i.update(width, height)
+            else:
+                i.update(width, height, self)
 
 class Ball(Circle):
 
@@ -167,6 +192,32 @@ class Ball(Circle):
         self.centre.x += self.vx 
         self.centre.y += self.vy
 
-    def catch(self, x, y):
-        return self.radius >= self.centre.dist(bg.Point(x, y))
-        
+    def catch(self, x, y, r):
+        return self.radius + r >= self.centre.dist(bg.Point(x, y))
+    
+class Ball_hunter(Ball):
+
+    def __init__(self, x, y, scale, color, vx, vy):
+        self.angle = 0
+        super().__init__(x, y, scale, color, vx, vy)
+        self.ftype = 'Ball_hunter'
+        self.cost = -(scale + abs(vx) + abs(vy))//2
+
+
+    def update(self, width, height, Balls_list):
+        super().update(width, height)
+        self.angle += 5
+        for i in Balls_list.figures:
+            if i.ftype == 'Ball':
+                if i.catch(self.centre.x, self.centre.y, self.radius):
+                    Balls_list.delet(i)
+
+    def draw(self, screen):
+        pygame.draw.circle(screen, self.color, (self.centre.x, self.centre.y), self.radius - 5*self.radius/7)
+        for i in range(15):
+            angle = math.radians(i * 360 / 15) + self.angle
+            start_x = self.centre.x + int((self.radius - 5*self.radius/7) * math.cos(angle))
+            start_y = self.centre.y + int((self.radius - 5*self.radius/7) * math.sin(angle))
+            end_x = self.centre.x + int((self.radius ) * math.cos(angle))
+            end_y = self.centre.y + int((self.radius ) * math.sin(angle))
+            pygame.draw.line(screen, self.color, (start_x, start_y), (end_x, end_y), 2)
