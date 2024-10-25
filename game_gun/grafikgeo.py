@@ -280,3 +280,10 @@ class Gun:
     
     def draw(self, screen, x, y):
         pygame.draw.circle(screen, RED, (self.x, self.y), 10)
+
+    
+class Tank(Gun):
+
+    def move(self, x=0, y= 0):
+        self.x += x
+        self.y += y

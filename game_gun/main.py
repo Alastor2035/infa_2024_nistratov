@@ -17,11 +17,11 @@ score = 0
 pygame.init()
 pygame.mixer.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Gun game")
+pygame.display.set_caption("tank game")
 clock = pygame.time.Clock()
 
 balls_list = gg.balls_list()
-gun = gg.Gun(200, 600)
+tank = gg.Tank(200, 600)
 f = open("game_sfere/score.txt",'r')
 sclist = []
 for i in f.readlines():
@@ -39,19 +39,27 @@ while running:
         if e.type == pygame.KEYDOWN:
             if e.key == pygame.K_SPACE:
                 balls_list.generate(WIDTH, HEIGHT) 
+            if e.key == pygame.K_a:
+                tank.move(x = -5)
+            if e.key == pygame.K_d:
+                tank.move(x = 5)
+            if e.key == pygame.K_s:
+                tank.move(y = 5)
+            if e.key == pygame.K_w:
+                tank.move(y = -5)
         if e.type == pygame.MOUSEBUTTONDOWN:
             x, y = pygame.mouse.get_pos()
             if e.button == 1:
-                Bh = gun.shot(x, y, 0)
+                Bh = tank.shot(x, y, 0)
             if e.button == 3:
-                Bh = gun.shot(x, y, 1)
+                Bh = tank.shot(x, y, 1)
             balls_list.add(Bh)
                  
     screen.fill((0, 0, 0))
     score += balls_list.update(WIDTH, HEIGHT)
     balls_list.draw(screen)
     x, y = pygame.mouse.get_pos()
-    gun.draw(screen, x, y)
+    tank.draw(screen, x, y)
     drawText(screen, WHITE, "Счёт:" + str(score), pygame.Rect(500, 10, 300, 30), font_size=50)
     drawText(screen, WHITE, "Топ:", pygame.Rect(700, 10, 300, 30), font_size=50)
     for i in range(min(5, len(sclist))):
