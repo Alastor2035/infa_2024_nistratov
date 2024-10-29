@@ -22,7 +22,7 @@ clock = pygame.time.Clock()
 
 balls_list = gg.balls_list()
 tank = gg.Tank(200, 600)
-f = open("game_sfere/score.txt",'r')
+f = open("game_gun/score.txt",'r')
 sclist = []
 for i in f.readlines():
     sclist.append(list(i.split(': '))[::-1])
@@ -68,7 +68,7 @@ while running:
 
     pygame.display.flip()
     clock.tick(FPS)
-f = open("game_sfere/score.txt",'r')
+f = open("game_gun/score.txt",'r')
 e = []
 for i in f.readlines():
     e.append(list(i.split(': '))[::-1])
@@ -76,7 +76,7 @@ for i in f.readlines():
 f.close()
 e.append([score, name])
 e.sort(reverse=True)
-f = open("game_sfere/score.txt",'w')
+f = open("game_gun/score.txt",'w')
 for i in range(min(5, len(e))):
     f.write(e[i][1] + ": " + str(e[i][0]) + '\n')
 f.close()

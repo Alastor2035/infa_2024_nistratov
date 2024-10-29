@@ -271,6 +271,15 @@ class Gun:
     def __init__(self, x, y):
         self.x = x
         self.y = y
+        self.w = 40
+        self.h = 10
+        self.centre = bg.Point(x, y)
+        self.tr = bg.Point(self.w//2, self.h//2) + self.centre
+        self.tl = bg.Point(-self.w//2, self.h//2) + self.centre
+        self.dr = bg.Point(self.w//2, -self.h//2) + self.centre
+        self.dl = bg.Point(-self.w//2, -self.h//2) + self.centre
+
+
     
     def shot(self, x, y, tp):
         np = bg.Vector(self.x, self.y, x, y)
@@ -279,7 +288,17 @@ class Gun:
         return Ball_hunter(self.x, self.y, 2, RED, np.x / np.dist() * 20, np.y / np.dist() * 20)
     
     def draw(self, screen, x, y):
-        pygame.draw.circle(screen, RED, (self.x, self.y), 10)
+        np = bg.Vector(self.x, self.y, x, y)
+        if y < self.y:
+            ang = math.acos(np * bg.Vector(-1, 0) / np.dist())
+        else:
+            ang = math.acos(np * bg.Vector(1, 0) / np.dist())
+        tr = self.tr.turn(ang, self.centre)
+        tl = self.tl.turn(ang, self.centre)
+        dr = self.tr.turn(ang, self.centre)
+        dl = self.tl.turn(ang, self.centre)
+        pygame.draw.polygon(screen, RED, [(tr.x, tr.y), (tl.x, tl.y), (dr.x, dr.y), (dl.x, dl.y)], 20)
+
 
     
 class Tank(Gun):
@@ -287,3 +306,8 @@ class Tank(Gun):
     def move(self, x=0, y= 0):
         self.x += x
         self.y += y
+        self.centre = bg.Point(self.x, self.y)
+        self.tr = bg.Point(self.w//2, self.h//2) + self.centre
+        self.tl = bg.Point(-self.w//2, self.h//2) + self.centre
+        self.dr = bg.Point(self.w//2, -self.h//2) + self.centre
+        self.dl = bg.Point(-self.w//2, -self.h//2) + self.centre

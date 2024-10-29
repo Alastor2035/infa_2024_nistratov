@@ -75,7 +75,10 @@ class Point:
         elif v2 * vs >= 0 and rev2 * ve >= 0 and not line:
             return abs((v2 ^ vs) / v2.dist())
         else:
-            return min(abs(vs.dist()), abs(ve.dist()))     
+            return min(abs(vs.dist()), abs(ve.dist()))   
+
+    def __add__ (self, p):
+            return Point(self.x+p.x, self.y + p.y)
     
     
     def turn(self, angle, point=False):
