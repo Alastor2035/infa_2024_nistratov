@@ -1,3 +1,3 @@
-# Двойная звезда
+# double star
 Star 30 white 1E30 1E10 0 0 40E3
 Star 30 cyan 1E30 -1E10 0 0 -40E3
