@@ -18,3 +18,4 @@ class Button(pygame.sprite.Sprite):
         self.image.fill((CYAN))
         drawText(self.image, WHITE, f"{self.text}", pygame.Rect(0, 0, self.rect.width, self.rect.height), font_size=20)
         self.rect.center = (self.x, self.y) 
+        
