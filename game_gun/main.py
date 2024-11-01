@@ -6,7 +6,6 @@ import auxiliar as aux
 from draw import *
 from colors import *
 
-
 print("Your name:")
 name = input()
 
